@@ -14,12 +14,14 @@
             color: #DEE2C6;
         }
         .container {
-            margin-top: 50px;
+            margin: 50px auto; /* Centered horizontally */
+            width: 400px; /* Fixed width for the container */
             background: #1e1e1e;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
             display: inline-block;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
         }
         .logo {
             text-transform: uppercase;
@@ -34,21 +36,28 @@
             font-size: 2em;
         }
         textarea, button {
+            width: 100%; /* Full width of the container */
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
             padding: 10px;
-            margin: 10px;
+            margin: 10px 0; /* Vertical margin only */
             border-radius: 5px;
             border: 1px solid #555;
             background-color: #333;
             color: #DEE2C6;
+            resize: none; /* Disable resizing of the textarea */
         }
         #bibName {
-            font-size: 8em; /* Increased font size for rolling animation */
+            font-size: 4em; /* Adjusted font size to fit within the fixed width */
             margin-top: 20px;
             font-weight: bold;
+            overflow: hidden; /* Prevents overflow if the name is too long */
+            white-space: nowrap; /* Keeps the name on a single line */
+            text-overflow: ellipsis; /* Adds "..." if the name overflows */
         }
         #removedList {
             margin-top: 20px;
             color: red;
+            word-wrap: break-word; /* Breaks long words to fit within the container */
         }
     </style>
 </head>
@@ -59,7 +68,7 @@
             <div class="bottom">RUN CLUB</div>
         </div>
         <h2>Lucky Draw Generator</h2>
-        <textarea id="nameList" placeholder="Enter names, one per line..." rows="6" style="width: 100%;"></textarea><br>
+        <textarea id="nameList" placeholder="Enter names, one per line..." rows="6"></textarea><br>
         <button onclick="generateName()" id="generateBtn">Generate</button>
         <p id="bibName"></p>
         <button onclick="keepName()" style="display: none;" id="keepBtn">Keep</button>
