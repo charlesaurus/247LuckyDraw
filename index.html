@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Draw Generator</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/octin-sports');
+        
+        body {
+            font-family: 'Octin Sports', sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: #DEE2C6;
+        }
+        .container {
+            margin-top: 50px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+            display: inline-block;
+        }
+        .logo {
+            text-transform: uppercase;
+            font-weight: bold;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+        .logo .top {
+            font-size: 6em; /* Increased font size for "247" */
+        }
+        .logo .bottom {
+            font-size: 2em;
+        }
+        textarea, button {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #DEE2C6;
+        }
+        #bibName {
+            font-size: 8em; /* Increased font size for rolling animation */
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #removedList {
+            margin-top: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="top">247</div>
+            <div class="bottom">RUN CLUB</div>
+        </div>
+        <h2>Lucky Draw Generator</h2>
+        <textarea id="nameList" placeholder="Enter names, one per line..." rows="6" style="width: 100%;"></textarea><br>
+        <button onclick="generateName()" id="generateBtn">Generate</button>
+        <p id="bibName"></p>
+        <button onclick="keepName()" style="display: none;" id="keepBtn">Keep</button>
+        <button onclick="removeName()" style="display: none;" id="removeBtn">Remove</button>
+        <p id="removedList"></p>
+        <button onclick="resetGenerator()">Reset</button>
+    </div>
+    
+    <script>
+        let availableNames = [];
+        let removedNames = [];
+        let currentName = null;
+
+        function generateName() {
+            // Get the list of names from the textarea
+            const rawNames = document.getElementById("nameList").value;
+            if (!availableNames.length) {
+                availableNames = rawNames.split("\n").map(name => name.trim()).filter(name => name !== "");
+            }
+            if (availableNames.length === 0) {
+                alert("No names left in the list!");
+                return;
+            }
+
+            // Rolling effect
+            let rollingEffect = setInterval(() => {
+                document.getElementById("bibName").textContent = availableNames[Math.floor(Math.random() * availableNames.length)];
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(rollingEffect);
+                let randomIndex = Math.floor(Math.random() * availableNames.length);
+                currentName = availableNames[randomIndex];
+                document.getElementById("bibName").textContent = currentName;
+                document.getElementById("removeBtn").style.display = "inline-block";
+                document.getElementById("keepBtn").style.display = "inline-block";
+            }, 4000);
+        }
+
+        function removeName() {
+            if (currentName !== null) {
+                availableNames = availableNames.filter(name => name !== currentName);
+                removedNames.push(currentName);
+                document.getElementById("removeBtn").style.display = "none";
+                document.getElementById("keepBtn").style.display = "none";
+                document.getElementById("bibName").textContent = "";
+                document.getElementById("removedList").textContent = "Removed Names: " + removedNames.join(", ");
+                currentName = null;
+                if (availableNames.length === 0) {
+                    document.getElementById("generateBtn").disabled = true;
+                }
+            }
+        }
+
+        function keepName() {
+            document.getElementById("removeBtn").style.display = "none";
+            document.getElementById("keepBtn").style.display = "none";
+        }
+
+        function resetGenerator() {
+            availableNames = [];
+            removedNames = [];
+            currentName = null;
+            document.getElementById("removedList").textContent = "";
+            document.getElementById("bibName").textContent = "";
+            document.getElementById("removeBtn").style.display = "none";
+            document.getElementById("keepBtn").style.display = "none";
+            document.getElementById("generateBtn").disabled = false;
+        }
+    </script>
+</body>
+</html>
